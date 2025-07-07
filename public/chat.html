@@ -1,49 +1,41 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>NongChat</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="css/style.css">
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/js/all.min.js"></script>
-  <script src="/socket.io/socket.io.js"></script>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NongChat Room</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <div class="chat-wrapper d-flex">
-    <!-- Sidebar -->
-    <div class="sidebar p-3">
-      <h5 class="mb-3">Chats</h5>
-      <ul id="userList" class="list-unstyled"></ul>
-    </div>
-
-    <!-- Chat Section -->
-    <div class="chat-section d-flex flex-column">
-      <div class="chat-header d-flex align-items-center justify-content-between px-3 py-2">
-        <div>
-          <strong id="currentContact">Pilih kontak</strong>
-        </div>
-        <button onclick="toggleMode()" class="btn btn-sm btn-light"><i class="fas fa-moon"></i></button>
+  <div class="container-fluid h-100 d-flex flex-column">
+    <div class="row flex-grow-1">
+      <!-- Sidebar Kontak -->
+      <div class="col-md-4 bg-light p-3" id="sidebar">
+        <h5>Kontak Aktif</h5>
+        <ul id="userList" class="list-group"></ul>
       </div>
 
-      <div id="chatBox" class="chat-box flex-grow-1 px-3 py-2 overflow-auto"></div>
-
-      <div class="chat-footer d-flex align-items-center px-3 py-2">
-        <input type="file" id="fileInput" hidden />
-        <button onclick="document.getElementById('fileInput').click()" class="btn btn-sm me-2"><i class="fas fa-paperclip"></i></button>
-        <button onclick="toggleEmoji()" class="btn btn-sm me-2"><i class="fas fa-smile"></i></button>
-        <div class="flex-grow-1">
-          <input type="text" id="messageInput" class="form-control" placeholder="Ketik pesan...">
+      <!-- Area Chat -->
+      <div class="col-md-8 d-flex flex-column chat-area">
+        <div class="chat-header d-flex justify-content-between align-items-center p-2 border-bottom bg-white">
+          <div id="currentContact">Pilih Kontak</div>
+          <button onclick="toggleMode()">🌙</button>
         </div>
-        <button onclick="sendMessage()" class="btn btn-success ms-2">Kirim</button>
+        <div id="chatBox" class="flex-grow-1"></div>
+        <div class="chat-input p-2 bg-white d-flex align-items-center gap-2">
+          <input type="file" id="fileInput" class="form-control w-auto" />
+          <input type="text" id="messageInput" class="form-control" placeholder="Ketik pesan..." />
+          <button onclick="sendMessage()" class="btn btn-success">Kirim</button>
+        </div>
       </div>
-
-      <div id="emojiPicker" style="display:none;"></div>
-      <audio id="notifAudio" src="notif.mp3" preload="auto"></audio>
     </div>
   </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/emoji-picker-element@^1/index.js" type="module"></script>
+  <audio id="notifAudio" src="notif.mp3" preload="auto"></audio>
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/emoji-picker-element"></script>
   <script src="js/app.js"></script>
 </body>
 </html>
