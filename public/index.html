@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>NongChat Login</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="d-flex justify-content-center align-items-center vh-100 bg-dark text-white">
+
+  <div class="card p-4" style="min-width: 300px; max-width: 400px; width: 100%;">
+    <h4 class="text-center mb-3">Masuk ke NongChat</h4>
+    <div class="mb-3">
+      <label for="phone" class="form-label">Nomor HP (08xx)</label>
+      <input type="text" id="phone" class="form-control" placeholder="08xxxxxxxxxx">
+    </div>
+    <button onclick="sendOTP()" class="btn btn-primary w-100">Kirim OTP via WhatsApp</button>
+
+    <div id="otpSection" class="mt-3" style="display:none;">
+      <label for="otp" class="form-label mt-2">Masukkan OTP</label>
+      <input type="text" id="otp" class="form-control" placeholder="6 digit OTP">
+      <button onclick="verifyOTP()" class="btn btn-success w-100 mt-2">Verifikasi & Masuk</button>
+    </div>
+
+    <div id="loginStatus" class="mt-3 text-center text-info"></div>
+  </div>
+
+  <script>
+    let phone = '';
+
+    function sendOTP() {
+      phone = document.getElementById('phone').value.trim();
+      if (!phone.startsWith('08')) return alert("Nomor harus dimulai dengan 08");
+
+      fetch('/send-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('otpSection').style.display = 'block';
+          document.getElementById('loginStatus').textContent = 'OTP terkirim ke WhatsApp!';
+        } else {
+          alert('Gagal kirim OTP');
+        }
+      });
+    }
+
+    function verifyOTP() {
+      const otp = document.getElementById('otp').value.trim();
+      fetch('/verify-otp', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ phone, otp })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          localStorage.setItem('userPhone', phone);
+          window.location.href = 'chat.html';
+        } else {
+          alert('OTP salah');
+        }
+      });
+    }
+  </script>
+
+</body>
+</html>
