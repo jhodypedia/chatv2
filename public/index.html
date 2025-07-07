@@ -1,57 +1,33 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>NongChat Login</title>
-  <link rel="icon" href="https://img.icons8.com/ios/50/chat--v1.png" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <meta charset="UTF-8">
+  <title>NongChat - Masuk</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body class="bg-dark text-white d-flex align-items-center justify-content-center" style="height:100vh;">
-  <div class="card bg-secondary p-4" style="width: 100%; max-width: 400px;">
-    <h4 class="mb-3 text-center">Masuk ke NongChat</h4>
-    <div class="mb-3">
-      <label for="namaInput" class="form-label">Nama Anda</label>
-      <input type="text" id="namaInput" class="form-control" placeholder="Contoh: Jhody" required />
-    </div>
-    <div class="mb-3">
-      <label for="nomorInput" class="form-label">Nomor WhatsApp</label>
-      <input type="tel" id="nomorInput" class="form-control" placeholder="Contoh: 081234567890" required />
-    </div>
-    <button class="btn btn-success w-100" onclick="submitLogin()">Masuk</button>
+<body class="login-page">
+  <div class="login-container">
+    <h2 class="mb-4">Selamat datang 👋</h2>
+    <form id="loginForm">
+      <input type="text" class="form-control mb-3" id="nameInput" placeholder="Nama">
+      <input type="text" class="form-control mb-3" id="phoneInput" placeholder="Nomor HP (08xxxx)">
+      <button type="submit" class="btn btn-success w-100">Masuk</button>
+    </form>
   </div>
 
   <script>
-    function submitLogin() {
-      const nama = document.getElementById("namaInput").value.trim();
-      let nomor = document.getElementById("nomorInput").value.trim();
-
-      if (!nama || !nomor) {
-        alert("Nama dan nomor wajib diisi!");
-        return;
-      }
-
-      // Konversi 08xx ke 62xx
-      if (nomor.startsWith("0")) {
-        nomor = "62" + nomor.slice(1);
-      }
-
-      fetch("/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nama, nomor })
-      })
-        .then(res => res.json())
-        .then(data => {
-          if (data.success) {
-            localStorage.setItem("userPhone", nomor);
-            localStorage.setItem("userName", nama);
-            window.location.href = "chat.html";
-          } else {
-            alert("Gagal mendaftar!");
-          }
-        });
-    }
+    document.getElementById('loginForm').addEventListener('submit', function(e) {
+      e.preventDefault();
+      const name = document.getElementById('nameInput').value.trim();
+      let phone = document.getElementById('phoneInput').value.trim();
+      if (phone.startsWith('08')) phone = '62' + phone.slice(1);
+      if (!name || !phone) return alert('Lengkapi data!');
+      localStorage.setItem('userName', name);
+      localStorage.setItem('userPhone', phone);
+      location.href = 'chat.html';
+    });
   </script>
 </body>
 </html>
